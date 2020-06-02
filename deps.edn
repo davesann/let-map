@@ -1,0 +1,3 @@
+{:paths ["src/main/clojure"]
+ :deps {dsann/doc-strings {:local/root "../doc-strings"}}}
+
