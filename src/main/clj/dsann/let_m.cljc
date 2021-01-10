@@ -20,7 +20,6 @@
   (let [s (name sym)]
     (re-find #"^(vec|map|seq|first|p)__" s)))
 
-
 (macros/deftime
   (defmacro sym-m
     "Creates a map from a seq of symbols.
@@ -42,8 +41,8 @@
     (let [destruct   (macros/case
                        :clj  destructure
                           ;; have to use resolve for the cljs branch because, even though not used,
-                          ;; the normal clj reader will throw an exception reading cljs.core
-                          ;; this does not work with self hosted - e.g. planck
+                          ;; the normal clj reader will throw an exception reading "cljs.core"
+                          ;; this does not work with self hosted - e.g. lumo as cljs.core/destructure is in a clj file
                        :cljs (ns-resolve 'cljs.core 'destructure))]
        (let [dargs (destruct args)
              vars  (take-nth 2 dargs)]
