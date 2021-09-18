@@ -4,7 +4,7 @@
     [net.cgrand.macrovich :as macros])
   ; cljs must self refer macros
   #?(:cljs (:require-macros
-             [dsann.let-m :refer [let-m assoc-m sym-m assoc-syms]])))
+             [dsann.let-m :refer [let-m let-assoc sym-m assoc-syms]])))
 
 ;; --------------------------------------------------
 ;; helpers for arg name filtering
@@ -50,7 +50,7 @@
             (sym-m ~@vars)))))
 
 
-  (defmacro assoc-m
+  (defmacro let-assoc
     "Like let-m, but assocs into the supplied map.
      For examples, see: dsann.let-m-test"
     [m & args]

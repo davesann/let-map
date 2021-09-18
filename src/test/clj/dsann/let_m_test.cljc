@@ -2,7 +2,7 @@
   (:require
     [clojure.test :refer [deftest is testing]]
     [dsann.test   :refer [are]]
-    [dsann.let-m  :refer [let-m assoc-m sym-m assoc-syms]]))
+    [dsann.let-m  :refer [let-m let-assoc sym-m assoc-syms]]))
 
 
 (deftest test-let-m
@@ -39,24 +39,24 @@
             b (let-m x 5 y 7)
             c (-> b :x inc))                 {:a 1 :b {:x 5 :y 7} :c 6}))))
 
-(deftest test-assoc-m
-  (testing "dsann.assoc-m"
+(deftest test-let-assoc
+  (testing "dsann.let-assoc"
     (let [m  {:x 1}
           md {:a 1}
           vd [1 2 3]]
       (testing "Exactly like let-m but assocs to an existing map."
         (are =
-          (assoc-m m a 1)                        {:x 1 :a 1}
-          (assoc-m m a 1 b 2)                    {:x 1 :a 1 :b 2}
-          (assoc-m m a 1 b (inc a))              {:x 1 :a 1 :b 2}
+          (let-assoc m a 1)                        {:x 1 :a 1}
+          (let-assoc m a 1 b 2)                    {:x 1 :a 1 :b 2}
+          (let-assoc m a 1 b (inc a))              {:x 1 :a 1 :b 2}
 
-          (assoc-m m a (range 3) b (map inc a))  {:x 1 :a '(0 1 2) :b '(1 2 3)}
-          (assoc-m m _a 1  b (inc _a))           {:x 1 :b 2}
+          (let-assoc m a (range 3) b (map inc a))  {:x 1 :a '(0 1 2) :b '(1 2 3)}
+          (let-assoc m _a 1  b (inc _a))           {:x 1 :b 2}
 
-          (assoc-m m {:keys [a]} md b (inc a))   {:x 1 :a 1 :b 2}
-          (assoc-m m [first & rest] vd)          {:x 1 :first 1 :rest '(2 3)}
+          (let-assoc m {:keys [a]} md b (inc a))   {:x 1 :a 1 :b 2}
+          (let-assoc m [first & rest] vd)          {:x 1 :first 1 :rest '(2 3)}
 
-          (assoc-m m
+          (let-assoc m
             a 1
             b (let-m x 5 y 7)
             c (-> b :x inc))                     {:x 1 :a 1 :b {:x 5 :y 7} :c 6})))))
