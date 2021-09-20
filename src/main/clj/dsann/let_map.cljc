@@ -1,10 +1,10 @@
-(ns dsann.let-m
+(ns dsann.let-map
   (:require
     [dsann.macros.helpers :refer [assert-args]]
     [net.cgrand.macrovich :as macros])
   ; cljs must self refer macros
   #?(:cljs (:require-macros
-             [dsann.let-m :refer [let-m let-assoc sym-m assoc-syms]])))
+             [dsann.let-map :refer [let-map let-assoc sym-map assoc-syms]])))
 
 ;; --------------------------------------------------
 ;; helpers for arg name filtering
@@ -21,10 +21,10 @@
     (re-find #"^(vec|map|seq|first|p)__" s)))
 
 (macros/deftime
-  (defmacro sym-m
+  (defmacro sym-map
     "Creates a map from a seq of symbols.
      Symbol names are converted to keywords as the key to the value it holds
-     For examples, see: dsann.let-m-test"
+     For examples, see: dsann.let-map-test"
     [& syms]
     (into {}
         (comp
@@ -33,9 +33,9 @@
           (map #(-> [(keyword %) %])))     ;; map entry is [keyword symbol]
         syms))
 
-  (defmacro let-m
-    "Takes a list of name-value pairs and returns a map: (let-m a 1 ...) => {:a 1 ...}
-     For examples, see: dsann.let-m-test"
+  (defmacro let-map
+    "Takes a list of name-value pairs and returns a map: (let-map a 1 ...) => {:a 1 ...}
+     For examples, see: dsann.let-map-test"
     [& args]
     (assert-args (even? (count args)) "an even number of forms")
     (let [destruct   (macros/case
@@ -47,21 +47,21 @@
        (let [dargs (destruct args)
              vars  (take-nth 2 dargs)]
          `(let [~@dargs]
-            (sym-m ~@vars)))))
+            (sym-map ~@vars)))))
 
 
   (defmacro let-assoc
-    "Like let-m, but assocs into the supplied map.
-     For examples, see: dsann.let-m-test"
+    "Like let-map, but assocs into the supplied map.
+     For examples, see: dsann.let-map-test"
     [m & args]
-    `(merge ~m (let-m ~@args)))
+    `(merge ~m (let-map ~@args)))
 
 
   (defmacro assoc-syms
-    "like sym-m but assocs to supplied map.
-     For examples, see: dsann.let-m-test"
+    "like sym-map but assocs to supplied map.
+     For examples, see: dsann.let-map-test"
     [m & syms]
-    `(merge ~m (sym-m ~@syms)))
+    `(merge ~m (sym-map ~@syms)))
 
   nil)
 

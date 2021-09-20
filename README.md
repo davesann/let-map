@@ -1,4 +1,4 @@
-# let-m
+# let-map
 
 ## Why?
 Abbreviation of constructs where you let vars and then want to create a map.
@@ -14,9 +14,9 @@ Abbreviation of constructs where you let vars and then want to create a map.
 ## Usage
 
 ```clojure
-(require '[dsann.let-m :refer [let-m])
+(require '[dsann.let-map :refer [let-map])
 
-(let-m
+(let-map
   a 1
   b (inc a)
   ...)
@@ -33,14 +33,16 @@ Abbreviation of constructs where you let vars and then want to create a map.
   ** Useful for intermediate values
 * Destructuring works
 
+* Refer to tests for examples
+
 ## Variants
 
-* assoc-m:
-  * like let-m but add to a provided map
-* sym-m:
+* let-assoc:
+  * like let-map but add to a provided map
+* sym-map:
   * create a map from a list of symbols. Keys will be the symbol names
 * assoc-syms
-  * like sym-m but add a provided map
+  * like sym-map but add to a provided map
 
 ## Examples
-See namespace: dsann.let-m-test
+See namespace: dsann.let-map-test
