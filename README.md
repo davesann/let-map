@@ -32,7 +32,7 @@ Abbreviation of constructs where you let vars and then want to create a map.
 * Names that start _ are removed from the final map
   * Useful for intermediate values
 * Destructuring works
-* Refer to tests for examples
+* Refer to tests for examples: [let-map tests](src/test/clj/dsann/let_map_test.cljc)
 
 ## Variants
 
