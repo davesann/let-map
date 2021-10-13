@@ -10,6 +10,11 @@ Abbreviation of constructs where you let vars and then want to create a map.
    :b b}
 
 ```
+## deps
+
+```clojure 
+io.github.davesann/let-map {:git/sha "60c48af" :git/tag "v1"}
+```
 
 ## Usage
 
