@@ -30,9 +30,8 @@ Abbreviation of constructs where you let vars and then want to create a map.
 
 * clj and cljs
 * Names that start _ are removed from the final map
-  ** Useful for intermediate values
+  * Useful for intermediate values
 * Destructuring works
-
 * Refer to tests for examples
 
 ## Variants
