@@ -1,6 +1,6 @@
 {:paths ["src/main/clj"]
  :deps {net.cgrand/macrovich {:mvn/version "0.2.1"}
-        dsann/macro-helpers  {:local/root  "../macro-helpers"}}
+        io.github.davesann/macro-helpers  {:git/sha "5c55d46" :tag "v1"}}
 
  :aliases {:test {:extra-paths ["src/test/clj"]
-                  :extra-deps  {dsann/test-helpers {:local/root  "../test-helpers"}}}}} 
+                  :extra-deps  {io.github.davesann/test-helpers {:git/sha "9e30dd" :git/tag "v1"}}}}}
