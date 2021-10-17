@@ -13,7 +13,12 @@ Abbreviation of constructs where you let vars and then want to create a map.
 ## deps
 
 ```clojure 
-io.github.davesann/let-map {:git/sha "60c48af" :git/tag "v1"}
+io.github.davesann/let-map {:git/sha "55e9b5f" :git/tag "v1"}
+```
+
+if you want to list all versions
+```
+git show-ref --tags --abbrev
 ```
 
 ## Usage
