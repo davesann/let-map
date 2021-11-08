@@ -10,16 +10,6 @@ Abbreviation of constructs where you let vars and then want to create a map.
    :b b}
 
 ```
-## deps
-
-```clojure 
-io.github.davesann/let-map {:git/sha "433a57a" :git/tag "v1"}
-```
-
-if you want to list all versions
-```
-git show-ref --tags --abbrev
-```
 
 ## Usage
 
@@ -35,6 +25,16 @@ git show-ref --tags --abbrev
 
 ```
 
+## Deps
+
+```clojure 
+io.github.davesann/let-map {:git/sha "433a57a" :git/tag "v1"}
+```
+
+if you want to list all versions
+```
+git show-ref --tags --abbrev
+```
 
 ## Features
 
