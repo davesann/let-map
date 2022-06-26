@@ -1,9 +1,8 @@
 (ns dsann.let-map-test
   (:require
-    [clojure.test :refer [deftest is testing]]
-    [dsann.test   :refer [are]]
-    [dsann.let-map  :refer [let-map let-assoc sym-map assoc-syms]]))
-
+    [clojure.test  :refer [deftest is testing]]
+    [dsann.test    :refer [are]]
+    [dsann.let-map :refer [let-map let-assoc sym-map assoc-syms]]))
 
 (deftest test-let-map
   (testing "dsann.let-map"

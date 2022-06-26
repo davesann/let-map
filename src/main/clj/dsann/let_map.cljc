@@ -1,7 +1,9 @@
 (ns dsann.let-map
+  (:refer-clojure :exclude [destructure])
   (:require
-    [dsann.macros.helpers :refer [assert-args]]
-    [net.cgrand.macrovich :as macros])
+    [net.cgrand.macrovich      :as macros]
+    [dsann.macros.helpers      :refer [assert-args]]
+    [dsann.let-map.destructure :refer [destructure]]) 
   ; cljs must self refer macros
   #?(:cljs (:require-macros
              [dsann.let-map :refer [let-map let-assoc sym-map assoc-syms]])))
@@ -38,16 +40,10 @@
      For examples, see: dsann.let-map-test"
     [& args]
     (assert-args (even? (count args)) "an even number of forms")
-    (let [destruct   (macros/case
-                       :clj  destructure
-                          ;; have to use resolve for the cljs branch because, even though not used,
-                          ;; the normal clj reader will throw an exception reading "cljs.core"
-                          ;; this does not work with self hosted - e.g. lumo as cljs.core/destructure is in a clj file
-                       :cljs (ns-resolve 'cljs.core 'destructure))]
-       (let [dargs (destruct args)
-             vars  (take-nth 2 dargs)]
-         `(let [~@dargs]
-            (sym-map ~@vars)))))
+    (let [dargs (destructure args)
+          vars  (take-nth 2 dargs)]
+      `(let [~@dargs]
+         (sym-map ~@vars))))
 
 
   (defmacro let-assoc
