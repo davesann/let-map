@@ -28,9 +28,7 @@ Abbreviation of constructs where you let vars and then want to create a map.
 ## Deps
 
 ```clojure 
-io.github.davesann/let-map {:git/sha "433a57a" :git/tag "v1"}
-io.github.davesann/let-map {:git/sha "73eb298" :git/tag "v2"}
-
+io.github.davesann/let-map {:git/sha "2128d45" :git/tag "v3"}
 ```
 
 if you want to list all versions
