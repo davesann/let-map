@@ -38,6 +38,16 @@
             b (let-map x 5 y 7)
             c (-> b :x inc))                 {:a 1 :b {:x 5 :y 7} :c 6}))))
 
+
+    ; (testing "namespaced keys"
+    ;    (are =
+    ;       (let-map ns/a 1) {:ns/a 1}))))
+
+
+
+
+
+
 (deftest test-let-assoc
   (testing "dsann.let-assoc"
     (let [m  {:x 1}
