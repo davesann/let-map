@@ -20,7 +20,7 @@
                       (api/quickdoc {:toc true
                                      :git/branch  "main"
                                      :github/repo "https://github.com/davesann/let-map"
-                                     :source-paths ["src/main/clj"]})}}}
+                                     :source-paths ["src/main/clj" "src/test/clj"]})}}}
                                      
 
   ; package-jar {:doc "Prepare jar for packages"
