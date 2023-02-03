@@ -1,6 +1,6 @@
 ;; initial outline from https://github.com/babashka/http-server/blob/main/bb.edn 
 {:pods {clj-kondo/clj-kondo                        {:version "2023.01.12"}}
- :deps {io.github.borkdude/quickdoc                {:git/sha "d5313344c97b79f014a90634313b5fd2205938af"}
+ :deps {io.github.borkdude/quickdoc                {:git/sha "1e810ddd08ee724ff5736530a35a989d0ecdc9de"}
         current/deps                               {:local/root "."}}
 ;        io.github.borkdude/gh-release-artifact     {:git/sha "cf082df46a648178d1904e9cbcb787d8136a35c6"}}
  :paths [".build"]

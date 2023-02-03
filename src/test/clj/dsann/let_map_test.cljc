@@ -27,6 +27,8 @@
     (testing "Destructuring works if needed"
       (let [m {:a 1} v [1 2 3]]
         (are =
+           (let-map {:keys [a]} m)             {:a 1}
+
            (let-map {:keys [a]} m  b (inc a))  {:a 1 :b 2}
 
            (let-map [first & rest] v)          {:first 1 :rest '(2 3)})))

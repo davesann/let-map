@@ -16,7 +16,7 @@
                            has-rest (some #{'&} b)]
                        (loop [ret (let [ret (conj bvec gvec val)]
                                     (if has-rest
-                                      (conj ret gseq (list seq gvec))
+                                      (conj ret gseq (list 'seq gvec))
                                       ret))
                               n 0
                               bs b
@@ -33,13 +33,13 @@
                                        (throw (ex-info "Unsupported binding form, only :as can follow & parameter" {}))
                                        (recur (pb (if has-rest
                                                     (conj ret
-                                                          gfirst `(~first ~gseq)
-                                                          gseq `(~next ~gseq))
+                                                          gfirst `(first ~gseq)
+                                                          gseq   `(next ~gseq))
                                                     ret)
                                                   firstb
                                                   (if has-rest
                                                     gfirst
-                                                    (list nth gvec n nil)))
+                                                    (list 'nth gvec n nil)))
                                               (inc n)
                                               (next bs)
                                               seen-rest?))))
@@ -49,11 +49,11 @@
                      (let [gmap (gensym "map__")
                            defaults (:or b)]
                        (loop [ret (-> bvec (conj gmap) (conj v)
-                                      (conj gmap) (conj (list 'if (list seq? gmap)
+                                      (conj gmap) (conj (list 'if (list 'seq? gmap)
                                                               #?(:clj
                                                                  `(clojure.core/seq-to-map-for-destructuring ~gmap)
                                                                  :cljs
-                                                                 (list apply hash-map gmap))
+                                                                 (list 'apply 'hash-map gmap))
                                                               gmap))
                                       ((fn [ret]
                                          (if (:as b)

@@ -1,8 +1,10 @@
 {:paths ["src/main/clj"]
  :deps {net.cgrand/macrovich {:mvn/version "0.2.1"}
-        io.github.davesann/macro-helpers {:git/sha "5c55d46" 
-                                          :git/tag "v1"}}
+        io.github.davesann/macro-helpers {:git/sha "5c55d46" :git/tag "v1"}}
  :aliases {:test {:extra-paths ["src/test/clj"]
-                  :extra-deps  {io.github.davesann/test-helpers 
-                                {:git/tag "v1"
-                                 :git/sha "7d61d7c"}}}}}
+                  :extra-deps  {io.github.davesann/test-helpers {:git/tag "v1" :git/sha "7d61d7c"}
+                                org.clojure/clojurescript {:mvn/version "1.11.60"}}}}}
+                                
+                                 
+;#_ {:git/tag "v3"
+;    :git/sha "0c7c023"
