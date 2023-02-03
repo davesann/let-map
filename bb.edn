@@ -19,7 +19,9 @@
             :task ;(let [{:keys [markdown]}
                       (api/quickdoc {:toc true
                                      :git/branch  "main"
-                                     :github/repo "https://github.com/davesann/let-map"})}}}
+                                     :github/repo "https://github.com/davesann/let-map"
+                                     :source-paths ["src/main/clj"]})}}}
+                                     
 
   ; package-jar {:doc "Prepare jar for packages"
   ;              :task (do
