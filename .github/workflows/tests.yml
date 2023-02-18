@@ -30,11 +30,13 @@ jobs:
           bb:  1.1.172        # babashka
 
   Test Clojure:
+    needs: [Setup Clojure]
+    steps:  
       - name: Run clojure tests
-        needs: [Setup Clojure]
         run: bb test-clj-once
 
   Test ClojureScript:
+    needs: [Setup Clojure]
+    steps:
       - name: Run Clojurescript tests
-        needs: [Setup Clojure]
         run: bb test-cljs-once
