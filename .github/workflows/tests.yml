@@ -1,7 +1,7 @@
 name: clj and cljs tests
 on: [push]
 jobs:
-  Setup-Clojure:
+  Tests:
     runs-on: ubuntu-latest
 
     steps:
