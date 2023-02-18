@@ -1,5 +1,8 @@
 # let-map
 
+## Status
+![example workflow](https://github.com/davesann/let-map/actions/workflows/tests.yml/badge.svg)
+
 ## Why?
 Abbreviation of constructs where you let vars and then want to create a map.
 
