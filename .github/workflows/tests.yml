@@ -1,7 +1,7 @@
-name: Test and Package project
+name: run clj and cljs tests
 on: [push]
 jobs:
-  clojure:
+  Tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,6 +14,7 @@ jobs:
           path: |
             - ~/.m2
             - ~/.gitlibs
+            - ~/.deps.clj
           key: ${{ runner.os }}-cache-${{ hashFiles('**/deps.edn') }}
 
       - name: Prepare java
