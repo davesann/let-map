@@ -1,7 +1,7 @@
 name: clj and cljs tests
 on: [push]
 jobs:
-  Setup Clojure:
+  Setup-Clojure:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,16 +29,16 @@ jobs:
           cli: 1.11.1.1208    # Clojure CLI based on tools.deps
           bb:  1.1.172        # babashka
 
-  Test Clojure:
+  Test-Clojure:
     runs-on: ubuntu-latest
-    needs: [Setup Clojure]
+    needs: [Setup-Clojure]
     steps:  
-      - name: Run clojure tests
+      - name: Run Clojure tests
         run: bb test-clj-once
 
-  Test ClojureScript:
+  Test-ClojureScript:
     runs-on: ubuntu-latest
-    needs: [Setup Clojure]
+    needs: [Setup-Clojure]
     steps:
       - name: Run Clojurescript tests
         run: bb test-cljs-once
