@@ -1,27 +1,51 @@
-;; initial outline from https://github.com/babashka/http-server/blob/main/bb.edn 
-{:pods {clj-kondo/clj-kondo                        {:version "2023.01.12"}}
- :deps {io.github.borkdude/quickdoc                {:git/sha "1e810ddd08ee724ff5736530a35a989d0ecdc9de"}
-        current/deps                               {:local/root "."}}
-;        io.github.borkdude/gh-release-artifact     {:git/sha "cf082df46a648178d1904e9cbcb787d8136a35c6"}}
- :paths [".build"]
- :tasks
- {:requires ([clojure.edn :as edn]
-             [clojure.string :as str]
-             [babashka.cli :as cli])
-             ;[utils])
-  :init (def cmd-line-opts
-          (cli/parse-opts *command-line-args*
-                          {:coerce {:toc       parse-boolean
-                                    :skip-bump parse-boolean}}))
+;; initial outline from https://github.com/babashka/http-server/blob/main/bb.edn
+{:pods {};clj-kondo/clj-kondo                        {:version "2023.01.12"}}
+ :deps { local/deps                                 {:local/root "."}}
+;        io.github.borkdude/gh-release-artifact     {:git/sha "cf082df46a648178d1904e9cbcb787d8136a35c6"}
 
-  quickdoc {:doc "Invoke quickdoc"
-            :requires ([quickdoc.api :as api])
-            :task ;(let [{:keys [markdown]}
-                      (api/quickdoc {:toc true
-                                     :git/branch  "main"
-                                     :github/repo "https://github.com/davesann/let-map"
-                                     :source-paths ["src/main/clj" "src/test/clj"]})}}}
-                                     
+ :paths ["src/bb" "src/main/clj"]
+ :tasks {:requires [[babashka.cli :as cli]]
+
+         clean {:requires [[babashka.fs :as fs]]
+                :task (do
+                        (fs/delete-tree "cljs-test-runner-out") 
+                        (fs/delete-tree ".cpcache"))}
+                
+
+         quickdoc {:extra-deps  {io.github.borkdude/quickdoc {:git/sha "62dd3c6a828c3a5e61bae6ca80c8ba4781356a67"}}
+                   :doc "Invoke quickdoc"
+                   :requires ([quickdoc.api :as api])
+                   :task ;(let [{:keys [markdown]}
+                             (api/quickdoc {:toc true
+                                            :git/branch  "main"
+                                            :github/repo "https://github.com/davesann/let-map"
+                                            :source-paths ["src/main/clj" "src/test/clj"]})}
+
+         ppcp {:doc "Pretty print the classpath - add (run 'ppcp) in a task to see it's classpath"
+               :requires [[babashka.classpath :refer [get-classpath]]
+                          [clojure.string :as s]
+                          [clojure.pprint :refer [pprint]]]
+
+               :task (-> (get-classpath)
+                         (s/split (re-pattern ":"))
+                         pprint)}         
+                         
+
+         test-clj-once  {:doc "invoke clojure tests"
+                         :task (shell "clojure -M:test-clj")} 
+
+         test-clj       {:doc "invoke clojure tests and watch"
+                         :task (shell "clojure -M:test-clj --watch --fail-fast --no-randomize")}
+
+
+         test-cljs-once {:doc "invoke clojurescript tests once"
+                         :task (shell "clojure -M:test-cljs -d src/test/clj")}
+
+
+         test-cljs      {:doc "invoke clojurescript tests and watch"
+                         :task (shell "clojure -M:test-cljs -d src/test/clj -w src/main/clj")}
+
+         print-commandline (prn (concat ["-" "arg"] *command-line-args*))}}
 
   ; package-jar {:doc "Prepare jar for packages"
   ;              :task (do
