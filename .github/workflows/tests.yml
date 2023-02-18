@@ -1,0 +1,35 @@
+name: Test and Package project
+on: [push]
+jobs:
+  clojure:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache Clojure Dependencies
+        uses: actions/cache@v3
+        with:
+          path:
+            - ~/.m2
+            - ~/.gitlibs
+          key: cache-${{ hashFiles('**/deps.edn') }}
+
+      - name: Prepare java
+        uses: actions/setup-java@v3.5.1
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install clojure tools
+        uses: DeLaGuardo/setup-clojure@10.1
+        with:
+          cli: 1.11.1.1208    # Clojure CLI based on tools.deps
+          bb:  1.1.172        # babashka
+
+      - name: Run clojure tests
+        run: bb test-clj-once
+
+      - name: Run Clojurescript tests
+        run: bb test-cljs-once
