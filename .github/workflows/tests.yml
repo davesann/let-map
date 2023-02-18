@@ -1,4 +1,4 @@
-name: run clj and cljs tests
+name: clj and cljs tests
 on: [push]
 jobs:
   Tests:
