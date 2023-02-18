@@ -15,7 +15,7 @@ jobs:
             - ~/.m2
             - ~/.gitlibs
             - ~/.deps.clj
-          key: ${{ runner.os }}-cache-${{ hashFiles('**/deps.edn') }}
+          key: cache-${{ hashFiles('**/deps.edn') }}
 
       - name: Prepare java
         uses: actions/setup-java@v3.5.1
