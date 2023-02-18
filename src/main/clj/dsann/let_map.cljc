@@ -1,9 +1,9 @@
 (ns dsann.let-map
-  (:refer-clojure :exclude [destructure])
+  #?(:cljs (:refer-clojure :exclude [destructure]))
   (:require
     [net.cgrand.macrovich      :as macros]
     [dsann.macros.helpers      :refer [assert-args]]
-    [dsann.let-map.destructure :refer [destructure]]) 
+    #?(:cljs [dsann.let-map.destructure :refer [destructure]])) 
   ; cljs must self refer macros
   #?(:cljs (:require-macros
              [dsann.let-map :refer [let-map let-assoc sym-map assoc-syms]])))
