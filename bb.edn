@@ -1,8 +1,6 @@
 ;; initial outline from https://github.com/babashka/http-server/blob/main/bb.edn
 {:pods {}
- :deps { local/deps                      {:local/root "."}
-         io.github.davesann/bb-git-local {:git/tag "v1" :git/sha "cbaecf7"}}
-                                         ;;{:local/root "../../bb/git-local"}}
+ :deps { local/deps                      {:local/root "."}}
 
 ;        io.github.borkdude/gh-release-artifact     {:git/sha "cf082df46a648178d1904e9cbcb787d8136a35c6"}
 
@@ -51,14 +49,15 @@
          print-commandline (prn (concat ["-" "arg"] *command-line-args*))
 
 
-         git-data         {:requires [[dsann.git :as g]]
+         git-data         {:extra-deps {io.github.davesann/bb-git-local {:git/tag "v2" :git/sha "fd4debc"}}
+                           :requires [[dsann.bb.git :as g]]
                            :task (g/git-data)}
 
-         create-git-data {:requires [[dsann.git :as g]
-                                     [clojure.pprint :refer [pprint]]]
+         create-git-data {:depends [git-data]
+                          :requires [[clojure.pprint :refer [pprint]]]
                           :task (binding [*print-namespace-maps* false]
                                   (spit "gen/git-data.edn"
-                                       (with-out-str (pprint (g/git-data)))))} ;data))}
+                                       (with-out-str (pprint git-data))))}
 
          create-readme {:doc "Generate README File"
                         :depends [git-data]
