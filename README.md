@@ -62,4 +62,4 @@ git show-ref --tags --abbrev
   * like sym-map but add to a provided map
 
 ## Examples
-See namespace: dsann.let-map-test
+See namespace: [dsann.let-map-test](src/test/clj/dsann/let_map_test.cljc)
