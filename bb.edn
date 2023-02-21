@@ -1,6 +1,9 @@
 ;; initial outline from https://github.com/babashka/http-server/blob/main/bb.edn
-{:pods {};clj-kondo/clj-kondo                        {:version "2023.01.12"}}
- :deps { local/deps                                 {:local/root "."}}
+{:pods {}
+ :deps { local/deps                      {:local/root "."}
+         io.github.davesann/bb-git-local {:git/tag "v1" :git/sha "cbaecf7"}}
+                                         ;;{:local/root "../../bb/git-local"}}
+
 ;        io.github.borkdude/gh-release-artifact     {:git/sha "cf082df46a648178d1904e9cbcb787d8136a35c6"}
 
  :paths ["src/bb" "src/main/clj"]
@@ -8,9 +11,9 @@
 
          clean {:requires [[babashka.fs :as fs]]
                 :task (do
-                        (fs/delete-tree "cljs-test-runner-out") 
+                        (fs/delete-tree "cljs-test-runner-out")
                         (fs/delete-tree ".cpcache"))}
-                
+
 
          quickdoc {:extra-deps  {io.github.borkdude/quickdoc {:git/sha "62dd3c6a828c3a5e61bae6ca80c8ba4781356a67"}}
                    :doc "Invoke quickdoc"
@@ -28,11 +31,11 @@
 
                :task (-> (get-classpath)
                          (s/split (re-pattern ":"))
-                         pprint)}         
-                         
+                         pprint)}
+
 
          test-clj-once  {:doc "invoke clojure tests"
-                         :task (shell "clojure -M:test-clj")} 
+                         :task (shell "clojure -M:test-clj")}
 
          test-clj       {:doc "invoke clojure tests and watch"
                          :task (shell "clojure -M:test-clj --watch --fail-fast --no-randomize")}
@@ -45,7 +48,27 @@
          test-cljs      {:doc "invoke clojurescript tests and watch"
                          :task (shell "clojure -M:test-cljs -d src/test/clj -w src/main/clj")}
 
-         print-commandline (prn (concat ["-" "arg"] *command-line-args*))}}
+         print-commandline (prn (concat ["-" "arg"] *command-line-args*))
+
+
+         git-data         {:requires [[dsann.git :as g]]
+                           :task (g/git-data)}
+
+         create-git-data {:requires [[dsann.git :as g]
+                                     [clojure.pprint :refer [pprint]]]
+                          :task (binding [*print-namespace-maps* false]
+                                  (spit "gen/git-data.edn"
+                                       (with-out-str (pprint (g/git-data)))))} ;data))}
+
+         create-readme {:doc "Generate README File"
+                        :depends [git-data]
+                        :extra-deps {comb/comb {:mvn/version "0.1.1"}}
+                        :requires [[comb.template :as comb]]
+                        :task (binding [*print-namespace-maps* false]
+                                (let [readme (slurp "src/docs/README.comb.md")]
+                                  (spit "README.md" (comb/eval readme git-data))))}}}
+
+
 
   ; package-jar {:doc "Prepare jar for packages"
   ;              :task (do
