@@ -39,9 +39,14 @@ if you want to list all versions
 git show-ref --tags --abbrev
 ```
 
+## Supported dialects
+
+* clj
+* cljs
+* bb
+
 ## Features
 
-* clj and cljs
 * Names that start _ are removed from the final map
   * Useful for intermediate values
 * Destructuring works
