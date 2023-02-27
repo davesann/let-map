@@ -12,25 +12,25 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ~/.m2 
+            ~/.m2
             ~/.gitlibs
             ~/.deps.clj
           key: clojure-cache-${{ hashFiles('**/deps.edn') }}
 
       - name: Prepare java
-        uses: actions/setup-java@v3.5.1
+        uses: actions/setup-java@v3.10.0
         with:
           distribution: 'temurin'
           java-version: '17'
 
       - name: Install clojure tools
-        uses: DeLaGuardo/setup-clojure@10.1
+        uses: DeLaGuardo/setup-clojure@10.2
         with:
           cli: 1.11.1.1208    # Clojure CLI based on tools.deps
           bb:  1.1.172        # babashka
-          
+
       - name: Run Clojure tests
         run: bb test-clj-once
-        
+
       - name: Run Clojurescript tests
         run: bb test-cljs-once
