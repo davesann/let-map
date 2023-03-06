@@ -63,3 +63,16 @@ git show-ref --tags --abbrev
 
 ## Examples
 See namespace: [dsann.let-map-test](src/test/clj/dsann/let_map_test.cljc)
+
+
+# Other
+
+## clj-kondo
+if using clj-kondo and you are seeing unresolved-symbol errors
+
+. Ensure there is a .clj-kondo in your project
+. Then run the following command to copy configs to exclude these errors
+
+```
+clj-kondo --lint "$(clojure -Spath)" --copy-configs --skip-lint
+```
