@@ -31,7 +31,7 @@ Abbreviation of constructs where you let vars and then want to create a map.
 ## Deps
 
 ```clojure
-io.github.davesann/let-map {:git/tag "v5" :git/sha "701675c"}
+io.github.davesann/let-map {:git/tag "v6" :git/sha "48015fb"}
 ```
 
 if you want to list all versions
@@ -63,3 +63,16 @@ git show-ref --tags --abbrev
 
 ## Examples
 See namespace: [dsann.let-map-test](src/test/clj/dsann/let_map_test.cljc)
+
+
+# Other
+
+## clj-kondo
+if using clj-kondo and you are seeing unresolved-symbol errors
+
+. Ensure there is a .clj-kondo in your project
+. Then run the following command to copy configs to exclude these errors
+
+```
+clj-kondo --lint "$(clojure -Spath)" --copy-configs --skip-lint
+```
