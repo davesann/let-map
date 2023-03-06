@@ -1,4 +1,4 @@
-{:paths ["src/main/clj"]
+{:paths ["src/main/clj" "resources"]
  :deps {net.cgrand/macrovich {:mvn/version "0.2.1"}
         io.github.davesann/macro-helpers {:git/sha "5c55d46" :git/tag "v1"}}
  :aliases {
@@ -15,9 +15,9 @@
 
            :test-clj {:extra-deps {lambdaisland/kaocha             {:mvn/version "1.78.1249"}
                                    io.github.davesann/test-helpers {:git/tag "v4" :git/sha "fe1aa25"}}
-                      :main-opts  ["-m" "kaocha.runner" "--config-file" "koacha-config.edn"]
+                      :main-opts  ["-m" "kaocha.runner" "--config-file" "config/koacha-config.edn"]
                       :exec-fn    kaocha.runner/exec-fn
-                      :exec-args  {:config-file "koacha-config.edn"}}
+                      :exec-args  {:config-file "config/koacha-config.edn"}}
 
            :test-cljs {:extra-paths ["src/test/clj"]
                        :extra-deps  {io.github.davesann/test-helpers {:git/tag "v4" :git/sha "fe1aa25"}
