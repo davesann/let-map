@@ -53,6 +53,11 @@
                            :requires [[dsann.bb.git :as g]]
                            :task (g/git-data)}
 
+         pp-git-data     {:depends [git-data] 
+                          :requires [[clojure.pprint :refer [pprint]]]
+                          :task (binding [*print-namespace-maps* false]
+                                   (pprint git-data))}
+
          create-git-data {:depends [git-data]
                           :requires [[clojure.pprint :refer [pprint]]]
                           :task (binding [*print-namespace-maps* false]
