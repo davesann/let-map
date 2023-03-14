@@ -1,28 +1,27 @@
 {:paths ["src/main/clj" "resources"]
  :deps {net.cgrand/macrovich {:mvn/version "0.2.1"}
         io.github.davesann/macro-helpers {:git/sha "5c55d46" :git/tag "v1"}}
- :aliases {
-          
-           ; :test-clj  {:extra-paths ["src/test/clj"]
-           ;             :extra-deps  {io.github.davesann/test-helpers      {:git/tag "v1" :git/sha "7d61d7c"}
-           ;                           io.github.cognitect-labs/test-runner {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
-           ;             ;; -M option
-           ;             :main-opts   ["-m" "cognitect.test-runner"]
 
-           ;             ;; -X option
-           ;             :exec-args   {:dirs ["src/test/clj"]}
-           ;             :exec-fn     cognitect.test-runner.api/test}
+ :aliases {:repl-deps {:extra-paths ["src/repl/clj"]
+                       :extra-deps {}}
 
-           :test-clj {:extra-deps {lambdaisland/kaocha             {:mvn/version "1.78.1249"}
-                                   io.github.davesann/test-helpers {:git/tag "v4" :git/sha "fe1aa25"}}
+           :test-deps {:extra-paths ["src/test/clj"]
+                       :extra-deps {io.github.davesann/test-helpers {:git/tag "v4" :git/sha "14a1f7f"}
+                                    org.flatland/ordered {:mvn/version "1.15.10"}}}
+
+           :clerk-deps {:extra-deps {io.github.nextjournal/clerk {:mvn/version "0.13.842"}}
+                        :extra-paths ["src/clerk/clj"]}
+
+           :nrepl-deps {:extra-deps { cider/cider-nrepl            {:mvn/version "0.30.0"}
+                                      cider/piggieback             {:mvn/version "0.5.3"}
+                                      nrepl/nrepl                  {:mvn/version "1.0.0"}}}
+
+           :test-clj {:extra-deps {lambdaisland/kaocha      {:mvn/version "1.80.1274"}}
                       :main-opts  ["-m" "kaocha.runner" "--config-file" "config/koacha-config.edn"]
                       :exec-fn    kaocha.runner/exec-fn
-                      :exec-args  {:config-file "config/koacha-config.edn"}}
+                      :exec-args  {:config-file "koacha-config.edn"}}
 
-           :test-cljs {:extra-paths ["src/test/clj"]
-                       :extra-deps  {io.github.davesann/test-helpers {:git/tag "v4" :git/sha "fe1aa25"}
-                                     olical/cljs-test-runner         {:mvn/version "3.8.0"}
+           :test-cljs {:extra-deps  {olical/cljs-test-runner         {:mvn/version "3.8.0"}
                                      org.clojure/clojurescript       {:mvn/version "1.11.60"}}
-
                         ;; -M option only
                         :main-opts ["-m" "cljs-test-runner.main"]}}}

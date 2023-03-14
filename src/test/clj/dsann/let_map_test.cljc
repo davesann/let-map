@@ -1,8 +1,54 @@
 (ns dsann.let-map-test
   (:require
     [clojure.test  :refer [deftest is testing]]
+    [flatland.ordered.map :refer [ordered-map]]
     [dsann.test    :refer [are]]
     [dsann.let-map :refer [let-map let-assoc sym-map assoc-syms]]))
+
+
+(deftest test-assoc-syms
+  (testing "dsann.assoc-syms"
+     (testing "Assoc symbols to map ..."
+       (are =
+           (let [a 1 b 2] (assoc-syms {:x 1} a b)) {:x 1 :a 1 :b 2}))
+     (testing "Retains map type"
+       (are =
+          (type (ordered-map))
+          (type (let [a 1]
+                  (assoc-syms (ordered-map) a)))))))
+
+(deftest test-sym-map
+  (testing "dsann.sym-map"
+     (testing "Create map from symbols ..."
+       (are =
+         (let [a 1 b 2] (sym-map a b))             {:a 1 :b 2}))))
+
+(deftest test-let-assoc
+  (testing "dsann.let-assoc"
+    (let [m  {:x 1}
+          md {:a 1}
+          vd [1 2 3]]
+      (testing "Exactly like let-map but assocs to an existing map."
+        (are =
+          (let-assoc m a 1)                        {:x 1 :a 1}
+          (let-assoc m a 1 b 2)                    {:x 1 :a 1 :b 2}
+          (let-assoc m a 1 b (inc a))              {:x 1 :a 1 :b 2}
+
+          (let-assoc m a (range 3) b (map inc a))  {:x 1 :a '(0 1 2) :b '(1 2 3)}
+          (let-assoc m _a 1  b (inc _a))           {:x 1 :b 2}
+
+          (let-assoc m {:keys [a]} md b (inc a))   {:x 1 :a 1 :b 2}
+          (let-assoc m [first & rest] vd)          {:x 1 :first 1 :rest '(2 3)}
+
+          (let-assoc m
+            a 1
+            b (let-map x 5 y 7)
+            c (-> b :x inc))                     {:x 1 :a 1 :b {:x 5 :y 7} :c 6}))
+      (testing "Retains map type"
+        (are =
+            (type (let-assoc (ordered-map :a 1) b 2))
+            (type (ordered-map)))))))
+
 
 (deftest test-let-map
   (testing "dsann.let-map"
@@ -39,39 +85,3 @@
             a 1
             b (let-map x 5 y 7)
             c (-> b :x inc))                 {:a 1 :b {:x 5 :y 7} :c 6}))))
-
-(deftest test-let-assoc
-  (testing "dsann.let-assoc"
-    (let [m  {:x 1}
-          md {:a 1}
-          vd [1 2 3]]
-      (testing "Exactly like let-map but assocs to an existing map."
-        (are =
-          (let-assoc m a 1)                        {:x 1 :a 1}
-          (let-assoc m a 1 b 2)                    {:x 1 :a 1 :b 2}
-          (let-assoc m a 1 b (inc a))              {:x 1 :a 1 :b 2}
-
-          (let-assoc m a (range 3) b (map inc a))  {:x 1 :a '(0 1 2) :b '(1 2 3)}
-          (let-assoc m _a 1  b (inc _a))           {:x 1 :b 2}
-
-          (let-assoc m {:keys [a]} md b (inc a))   {:x 1 :a 1 :b 2}
-          (let-assoc m [first & rest] vd)          {:x 1 :first 1 :rest '(2 3)}
-
-          (let-assoc m
-            a 1
-            b (let-map x 5 y 7)
-            c (-> b :x inc))                     {:x 1 :a 1 :b {:x 5 :y 7} :c 6})))))
-
-
-(deftest test-sym-map
-  (testing "dsann.sym-map"
-     (testing "Create map from symbols ..."
-       (are =
-         (let [a 1 b 2] (sym-map a b))             {:a 1 :b 2}))))
-
-(deftest test-assoc-syms
-  (testing "dsann.assoc-syms"
-     (testing "Assoc symbols to map ..."
-       (are =
-         (let [a 1 b 2] (assoc-syms {:x 1} a b)) {:x 1 :a 1 :b 2}))))
-

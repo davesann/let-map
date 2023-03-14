@@ -5,22 +5,56 @@
 ;        io.github.borkdude/gh-release-artifact     {:git/sha "cf082df46a648178d1904e9cbcb787d8136a35c6"}
 
  :paths ["src/bb" "src/main/clj"]
- :tasks {:requires [[babashka.cli :as cli]]
+ :tasks {:requires [[babashka.cli   :as cli]
+                    [clojure.string :as s]
+                    [clojure.pprint :refer [pprint]]]
+
+         :init (do
+                 (defn shell-x [cmd opts]
+                   (println cmd)
+                   (println "options:")
+                   (pprint  opts)
+                   (apply shell cmd (apply concat opts)))
+
+                 (defn shell-cmd [& args]
+                   (let [cmd (s/join " " args)]
+                     (println cmd)
+                     (apply shell args))))
+
+
+         clerk-notebooks  "src/clerk/notebooks"
+         clj-src-path     "src/main/clj"
+         clj-test-path    "src/test/clj"
+         git-repo         (str "https://github.com/" "davesann/let-map")
 
          clean {:requires [[babashka.fs :as fs]]
                 :task (do
+                        ;; nrepl things
+                        (fs/delete-if-exists ".nrepl-port")
+
+                        ;; clojure things
+                        (fs/delete-tree ".cpcache")
+
+                        ;; cljs testing things
                         (fs/delete-tree "cljs-test-runner-out")
-                        (fs/delete-tree ".cpcache"))}
 
+                        ;; cljs npm and node things
+                        (fs/delete-tree ".shadow-cljs")
+                        (fs/delete-tree "node_modules")
+                        (fs/delete-if-exists "package-lock.json")
+                        (fs/delete-if-exists "package.json")
 
-         quickdoc {:extra-deps  {io.github.borkdude/quickdoc {:git/sha "62dd3c6a828c3a5e61bae6ca80c8ba4781356a67"}}
-                   :doc "Invoke quickdoc"
+                        ;; clerk things
+                        (fs/delete-tree ".clerk"))}
+
+         quickdoc {:extra-deps {io.github.borkdude/quickdoc {:git/sha "32e726cd6d785d00e49d4e614a05f7436d3831c0"}}
+                   :doc      "Invoke quickdoc"
+                   :depends  [clj-src-path git-repo]
                    :requires ([quickdoc.api :as api])
-                   :task ;(let [{:keys [markdown]}
-                             (api/quickdoc {:toc true
-                                            :git/branch  "main"
-                                            :github/repo "https://github.com/davesann/let-map"
-                                            :source-paths ["src/main/clj" "src/test/clj"]})}
+                   :task     (api/quickdoc {:toc true
+                                            :git/branch   "main"
+                                            :github/repo  git-repo
+                                            :source-paths [clj-src-path]})}
 
          ppcp {:doc "Pretty print the classpath - add (run 'ppcp) in a task to see it's classpath"
                :requires [[babashka.classpath :refer [get-classpath]]
@@ -32,31 +66,42 @@
                          pprint)}
 
 
+         nrepl {:doc "run an nrepl server"
+                :task (shell-cmd "clojure -M:nrepl-deps:repl-deps:test-deps:clerk-deps"
+                                 "-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]")}
+
+
+         clerk-watch {:doc "Run clerk and watch for changes"
+                      :depends [clj-src-path clerk-notebooks]
+                      :task (let [;cmd "clojure -X:clerk nextjournal.clerk/serve!"
+                                  cmd "clojure -X:clerk-deps dsann.clerk.init/serve!"
+                                  default-opts {:watch-paths [clj-src-path clerk-notebooks]
+                                                :port 8888
+                                                :browse? true}
+                                  cli-opts (cli/parse-opts *command-line-args* {:coerce {:port :int}})
+                                  opts (merge default-opts cli-opts)]
+                              (shell-x cmd opts))}
+
          test-clj-once  {:doc "invoke clojure tests"
-                         :task (shell "clojure -M:test-clj")}
+                         :task (shell "clojure -M:test-clj:test-deps")}
 
          test-clj       {:doc "invoke clojure tests and watch"
-                         :task (shell "clojure -M:test-clj --watch --fail-fast --no-randomize")}
+                         :task (shell "clojure -M:test-clj:test-deps --watch --fail-fast --no-randomize")}
 
 
          test-cljs-once {:doc "invoke clojurescript tests once"
-                         :task (shell "clojure -M:test-cljs -d src/test/clj")}
+                         :depends [clj-test-path]
+                         :task (shell "clojure -M:test-cljs:test-deps" "-d" clj-test-path)}
 
 
          test-cljs      {:doc "invoke clojurescript tests and watch"
-                         :task (shell "clojure -M:test-cljs -d src/test/clj -w src/main/clj")}
-
-         print-commandline (prn (concat ["-" "arg"] *command-line-args*))
+                         :depends [clj-src-path clj-test-path]
+                         :task (shell "clojure -M:test-cljs:test-deps" "-d" clj-test-path "-w" clj-src-path)}
 
 
          git-data         {:extra-deps {io.github.davesann/bb-git-local {:git/tag "v2" :git/sha "fd4debc"}}
                            :requires [[dsann.bb.git :as g]]
                            :task (g/git-data)}
-
-         pp-git-data     {:depends [git-data] 
-                          :requires [[clojure.pprint :refer [pprint]]]
-                          :task (binding [*print-namespace-maps* false]
-                                   (pprint git-data))}
 
          create-git-data {:depends [git-data]
                           :requires [[clojure.pprint :refer [pprint]]]
@@ -75,40 +120,3 @@
 
 
   ; package-jar {:doc "Prepare jar for packages"
-  ;              :task (do
-  ;                      (println "Producing uberjar")
-  ;                      (shell "bb --config .build/uberjar.edn --deps-root .
-  ;                             uberjar http-server.jar -m babashka.http-server"))}
-
-  ; upload-jar {:doc "Upload jar to release"
-  ;             :depends [package-jar]
-  ;             :requires ([borkdude.gh-release-artifact :as ghr])
-  ;             :task (do
-  ;                     (println "Uploading jar" (str "v" (utils/format-version)))
-  ;                     (ghr/overwrite-asset {:org "babashka"
-  ;                                           :repo "http-server"
-  ;                                           :file "http-server.jar"
-  ;                                           :draft false
-  ;                                           :tag (str "v" (utils/format-version))}))}}}
-
-  ; tag {:doc "Create and push tag"
-  ;      :task (do (shell "git tag" (str "v" (utils/format-version)))
-  ;                (shell "git push --atomic" "origin" "main" (str "v" (utils/format-version))))}
-
-  ; bump-release {:doc "Bump release counter"
-  ;               :task (let [old-version (utils/format-version)]
-  ;                       (utils/bump-version)
-  ;                       (spit "README.md" (str/replace (slurp "README.md")
-  ;                                                      old-version
-  ;                                                      (utils/format-version)))
-  ;                       (shell "git add version.edn README.md")
-  ;                       (shell "git commit -m" (str "v" (utils/format-version))))}
-
-  ; publish {:doc "Bump release count and publish to clojars"
-  ;          :task (do
-  ;                  (when-not (:skip-bump cmd-line-opts)
-  ;                    (run 'bump-release))
-  ;                  (println "Uploading jar")
-  ;                  (run 'tag)
-  ;                  (run 'upload-jar)
-  ;                  (clojure "-T:build deploy"))}}}
