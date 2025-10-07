@@ -18,11 +18,8 @@ Abbreviation of constructs where you let vars and then want to create a map.
 
 ## Usage
 
-<<<<<<< HEAD
-=======
-### ns let-map 
+### namespace: let-map 
 
->>>>>>> namespaced-keys
 ```clojure
 (require '[dsann.let-map :refer [let-map])
 
@@ -35,9 +32,7 @@ Abbreviation of constructs where you let vars and then want to create a map.
 
 ```
 
-<<<<<<< HEAD
-=======
-### ns let-map2
+### namespace: let-map2
 
 let-map2 should be preferred because the syntax is closer to let.
 It also adds additional features: namespaced keywords and value filtering (particularly nils)
@@ -56,8 +51,6 @@ It also adds additional features: namespaced keywords and value filtering (parti
 
 refer to dsann.let-map2-test for examples
 
-
->>>>>>> namespaced-keys
 ## Deps
 
 ```clojure
@@ -86,10 +79,7 @@ git show-ref --tags --abbrev
   - The input map type will be retained when using assoc versions
   - If you want to let-map a specific map type then `(let-assoc (my-map-type) a 1 ...)`
 
-<<<<<<< HEAD
-## Variants
-=======
-## Variants in ns let-map
+## Variants in namespace: let-map
 
 - let-assoc:
   - like let-map but add to a provided map
@@ -98,8 +88,7 @@ git show-ref --tags --abbrev
 - assoc-syms
   - like sym-map but add to a provided map
   
-## Variants in ns let-map2
->>>>>>> namespaced-keys
+## Variants in namespace: let-map2
 
 - let-assoc:
   - like let-map but add to a provided map
@@ -108,11 +97,6 @@ git show-ref --tags --abbrev
 - assoc-syms
   - like sym-map but add to a provided map
 
-<<<<<<< HEAD
-## Examples
-
-See namespace: [dsann.let-map-test](src/test/clj/dsann/let_map_test.cljc)
-=======
 ### namespaced keywords
 
 all variants that end in -ns create namespaced keywords
@@ -141,7 +125,6 @@ all variants that end in a '-' filter based on values. the default is to filter 
 See namespaces: 
 - [dsann.let-map-test](src/test/clj/dsann/let_map_test.cljc)
 - [dsann.let-map2-test](src/test/clj/dsann/let_map2_test.cljc)
->>>>>>> namespaced-keys
 
 # Other
 
@@ -149,11 +132,7 @@ See namespaces:
 
 if using clj-kondo and you are seeing unresolved-symbol errors
 
-<<<<<<< HEAD
-1. Ensure there is a .clj-kondo in your project
-=======
 1. Ensure there is a .clj-kondo directory in your project
->>>>>>> namespaced-keys
 1. Then run the following command to copy configs to exclude these errors
 
 ```
