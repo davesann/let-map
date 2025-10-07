@@ -1,7 +1,6 @@
 ;; initial outline from https://github.com/babashka/http-server/blob/main/bb.edn
 {:pods {}
- :deps { local/deps                      {:local/root "."}}
-
+ :deps {local/deps                      {:local/root "."}}
 ;        io.github.borkdude/gh-release-artifact     {:git/sha "cf082df46a648178d1904e9cbcb787d8136a35c6"}
 
  :paths ["src/bb" "src/main/clj"]
@@ -20,7 +19,6 @@
                    (let [cmd (s/join " " args)]
                      (println cmd)
                      (apply shell args))))
-
 
          clerk-notebooks  "src/clerk/notebooks"
          clj-src-path     "src/main/clj"
@@ -47,7 +45,8 @@
                         ;; clerk things
                         (fs/delete-tree ".clerk"))}
 
-         quickdoc {:extra-deps {io.github.borkdude/quickdoc {:git/sha "32e726cd6d785d00e49d4e614a05f7436d3831c0"}}
+         quickdoc {:extra-deps {io.github.borkdude/quickdoc {:git/tag "v0.2.5"
+                                                             :git/sha "25784ca"}}
                    :doc      "Invoke quickdoc"
                    :depends  [clj-src-path git-repo]
                    :requires ([quickdoc.api :as api])
@@ -65,11 +64,9 @@
                          (s/split (re-pattern ":"))
                          pprint)}
 
-
          nrepl {:doc "run an nrepl server"
                 :task (shell-cmd "clojure -M:nrepl-deps:repl-deps:test-deps:clerk-deps"
                                  "-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]")}
-
 
          clerk-watch {:doc "Run clerk and watch for changes"
                       :depends [clj-src-path clerk-notebooks]
@@ -88,16 +85,13 @@
          test-clj       {:doc "invoke clojure tests and watch"
                          :task (shell "clojure -M:test-clj:test-deps --watch --fail-fast --no-randomize")}
 
-
          test-cljs-once {:doc "invoke clojurescript tests once"
                          :depends [clj-test-path]
                          :task (shell "clojure -M:test-cljs:test-deps" "-d" clj-test-path)}
 
-
          test-cljs      {:doc "invoke clojurescript tests and watch"
                          :depends [clj-src-path clj-test-path]
                          :task (shell "clojure -M:test-cljs:test-deps" "-d" clj-test-path "-w" clj-src-path)}
-
 
          git-data         {:extra-deps {io.github.davesann/bb-git-local {:git/tag "v2" :git/sha "fd4debc"}}
                            :requires [[dsann.bb.git :as g]]
@@ -107,8 +101,7 @@
                           :requires [[clojure.pprint :refer [pprint]]]
                           :task (binding [*print-namespace-maps* false]
                                   (spit "gen/git-data.edn"
-                                       (with-out-str (pprint git-data))))}
-
+                                        (with-out-str (pprint git-data))))}
          create-readme {:doc "Generate README File"
                         :depends [git-data]
                         :extra-deps {comb/comb {:mvn/version "0.1.1"}}
@@ -116,7 +109,3 @@
                         :task (binding [*print-namespace-maps* false]
                                 (let [readme (slurp "src/docs/README.comb.md")]
                                   (spit "README.md" (comb/eval readme git-data))))}}}
-
-
-
-  ; package-jar {:doc "Prepare jar for packages"
