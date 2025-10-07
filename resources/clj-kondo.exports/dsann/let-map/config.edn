@@ -1,0 +1,12 @@
+{:linters
+ {:unresolved-symbol
+  {:exclude [(dsann.let-map/let-map)
+             (dsann.let-map/let-assoc)
+             (dsann.let-map2/let-map)
+             (dsann.let-map2/let-map-)
+             (dsann.let-map2/let-map-ns)
+             (dsann.let-map2/let-map-ns-)
+             (dsann.let-map2/let-assoc)
+             (dsann.let-map2/let-assoc-)
+             (dsann.let-map2/let-assoc-ns)
+             (dsann.let-map2/let-assoc-ns-)]}}}
