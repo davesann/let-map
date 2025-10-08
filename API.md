@@ -5,24 +5,24 @@
     -  [`let-map`](#dsann.let-map/let-map) - Takes a list of name-value pairs and returns a map: (let-map a 1 ...) => {:a 1 ...} For examples, see: dsann.let-map-test.
     -  [`sym-map`](#dsann.let-map/sym-map) - Creates a map from a seq of symbols.
 -  [`dsann.let-map2`](#dsann.let-map2) 
-    -  [`assoc-syms`](#dsann.let-map2/assoc-syms) - like sym-map but assocs to supplied map.
-    -  [`assoc-syms-`](#dsann.let-map2/assoc-syms-) - As for assoc-syms.
-    -  [`assoc-syms-ns`](#dsann.let-map2/assoc-syms-ns) - As for assoc-syms but uses a provided namespace.
-    -  [`assoc-syms-ns-`](#dsann.let-map2/assoc-syms-ns-) - As for assoc-syms-ns.
-    -  [`let-assoc`](#dsann.let-map2/let-assoc) - Like let-map, but assocs into the supplied map.
-    -  [`let-assoc-`](#dsann.let-map2/let-assoc-) - As for let-assoc.
-    -  [`let-assoc-ns`](#dsann.let-map2/let-assoc-ns) - As for let-assoc but uses a provided namespace The provided namespace can be: string; keyword; namespaced keyword; or symbol.
-    -  [`let-assoc-ns-`](#dsann.let-map2/let-assoc-ns-) - As for let-assoc-ns.
-    -  [`let-map`](#dsann.let-map2/let-map) - Takes a list of name-value pairs and returns a map (let-map [a 1 ...]) => {:a 1 ...} For examples, see: dsann.let-map2-test.
-    -  [`let-map-`](#dsann.let-map2/let-map-) - As for let-map.
-    -  [`let-map-ns`](#dsann.let-map2/let-map-ns) - As for let-map but uses a provided namespace The provided namespace can be: string; keyword; namespaced keyword; or symbol.
-    -  [`let-map-ns-`](#dsann.let-map2/let-map-ns-) - As for let-map-ns.
-    -  [`resolve-ns-name`](#dsann.let-map2/resolve-ns-name) - resolves the input to a namespace name for use in namespaced keywords.
+    -  [`assoc-syms`](#dsann.let-map2/assoc-syms) - As for sym-map but assocs to a supplied map.
+    -  [`assoc-syms-`](#dsann.let-map2/assoc-syms-) - As for assoc-syms, adding value filtering for the final map.
+    -  [`assoc-syms-ns`](#dsann.let-map2/assoc-syms-ns) - As for assoc-syms, creates keys in a provided namespace.
+    -  [`assoc-syms-ns-`](#dsann.let-map2/assoc-syms-ns-) - As for assoc-syms-ns, adding value filtering for the final map.
+    -  [`let-assoc`](#dsann.let-map2/let-assoc) - As for let-map but assocs into a supplied map.
+    -  [`let-assoc-`](#dsann.let-map2/let-assoc-) - As for let-assoc, adding value filtering for the final map.
+    -  [`let-assoc-ns`](#dsann.let-map2/let-assoc-ns) - As for let-assoc but creates keys in a provided namespace.
+    -  [`let-assoc-ns-`](#dsann.let-map2/let-assoc-ns-) - As for let-assoc-ns, adding value filtering for the final map.
+    -  [`let-map`](#dsann.let-map2/let-map) - Takes a list of name-value pairs and returns a map (works like 'let').
+    -  [`let-map-`](#dsann.let-map2/let-map-) - As for let-map, adding value filtering for the final map.
+    -  [`let-map-ns`](#dsann.let-map2/let-map-ns) - As for let-map but creates keys in a provided namespace.
+    -  [`let-map-ns-`](#dsann.let-map2/let-map-ns-) - As for let-map-ns, adding value filtering for the final map.
+    -  [`resolve-ns-name`](#dsann.let-map2/resolve-ns-name) - (internal) Resolves the input to a namespace name for use in namespaced keywords.
     -  [`sym-map`](#dsann.let-map2/sym-map) - Creates a map from a seq of symbols.
-    -  [`sym-map-`](#dsann.let-map2/sym-map-) - As for sym-map.
-    -  [`sym-map-ns`](#dsann.let-map2/sym-map-ns) - As for sym-map but uses a provided namespace.
-    -  [`sym-map-ns-`](#dsann.let-map2/sym-map-ns-) - As for sym-map-ns.
-    -  [`syms->map-entries`](#dsann.let-map2/syms->map-entries) - Convert symbols intoa vector of map entries [k v].
+    -  [`sym-map-`](#dsann.let-map2/sym-map-) - As for sym-map, adding value filtering for the final map.
+    -  [`sym-map-ns`](#dsann.let-map2/sym-map-ns) - As for sym-map but creates keys in a provided namespace.
+    -  [`sym-map-ns-`](#dsann.let-map2/sym-map-ns-) - As for sym-map-ns, adding value filtering for the final map.
+    -  [`syms->map-entries`](#dsann.let-map2/syms->map-entries) - (internal) Convert symbols into a vector of map entries [k v].
 
 -----
 # <a name="dsann.let-map">dsann.let-map</a>
@@ -92,7 +92,7 @@ Creates a map from a seq of symbols.
 ```
 Macro.
 
-like sym-map but assocs to supplied map.
+As for sym-map but assocs to a supplied map.
 
      (let [a 1 b 2] (assoc-syms some-map a b)) => {... :a 1 :b 2}
 
@@ -107,7 +107,7 @@ like sym-map but assocs to supplied map.
 ```
 Macro.
 
-As for assoc-syms.
+As for assoc-syms, adding value filtering for the final map.
        Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
 
        For examples, see: dsann.let-map2-test
@@ -121,7 +121,7 @@ As for assoc-syms.
 ```
 Macro.
 
-As for assoc-syms but uses a provided namespace.
+As for assoc-syms, creates keys in a provided namespace.
 
      The provided namespace can be: string; keyword; namespaced keyword; or symbol.
        strings, keywords and symbols takes the literal value for the namespace.
@@ -139,7 +139,7 @@ As for assoc-syms but uses a provided namespace.
 ```
 Macro.
 
-As for assoc-syms-ns.
+As for assoc-syms-ns, adding value filtering for the final map.
      Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
      For examples, see: dsann.let-map2-test
 <p><sub><a href="https://github.com/davesann/let-map/blob/main/src/main/clj/dsann/let_map2.cljc#L214-L223">Source</a></sub></p>
@@ -151,7 +151,7 @@ As for assoc-syms-ns.
 ```
 Macro.
 
-Like let-map, but assocs into the supplied map.
+As for let-map but assocs into a supplied map.
 
        (let-assoc some-map [a 1 b (inc a)]) => {... :a 1 :b 2}
 
@@ -166,7 +166,7 @@ Like let-map, but assocs into the supplied map.
 ```
 Macro.
 
-As for let-assoc.
+As for let-assoc, adding value filtering for the final map.
        Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
 
        For examples, see: dsann.let-map2-test
@@ -180,7 +180,7 @@ As for let-assoc.
 ```
 Macro.
 
-As for let-assoc but uses a provided namespace
+As for let-assoc but creates keys in a provided namespace.
 
      The provided namespace can be: string; keyword; namespaced keyword; or symbol.
        strings, keywords and symbols takes the literal value for the namespace.
@@ -199,7 +199,7 @@ As for let-assoc but uses a provided namespace
 ```
 Macro.
 
-As for let-assoc-ns.
+As for let-assoc-ns, adding value filtering for the final map.
      Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
      For examples, see: dsann.let-map2-test
 <p><sub><a href="https://github.com/davesann/let-map/blob/main/src/main/clj/dsann/let_map2.cljc#L237-L251">Source</a></sub></p>
@@ -211,7 +211,7 @@ As for let-assoc-ns.
 ```
 Macro.
 
-Takes a list of name-value pairs and returns a map
+Takes a list of name-value pairs and returns a map (works like 'let').
 
        (let-map [a 1 ...]) => {:a 1 ...}
 
@@ -226,7 +226,7 @@ Takes a list of name-value pairs and returns a map
 ```
 Macro.
 
-As for let-map.
+As for let-map, adding value filtering for the final map.
       Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
 
       For examples, see: dsann.let-map2-test
@@ -240,7 +240,7 @@ As for let-map.
 ```
 Macro.
 
-As for let-map but uses a provided namespace
+As for let-map but creates keys in a provided namespace.
 
      The provided namespace can be: string; keyword; namespaced keyword; or symbol.
        strings, keywords and symbols takes the literal value for the namespace.
@@ -259,7 +259,7 @@ As for let-map but uses a provided namespace
 ```
 Macro.
 
-As for let-map-ns.
+As for let-map-ns, adding value filtering for the final map.
      Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
      For examples, see: dsann.let-map2-test
 <p><sub><a href="https://github.com/davesann/let-map/blob/main/src/main/clj/dsann/let_map2.cljc#L253-L263">Source</a></sub></p>
@@ -271,7 +271,7 @@ As for let-map-ns.
 ```
 Function.
 
-resolves the input to a namespace name for use in namespaced keywords
+(internal) Resolves the input to a namespace name for use in namespaced keywords
 <p><sub><a href="https://github.com/davesann/let-map/blob/main/src/main/clj/dsann/let_map2.cljc#L29-L36">Source</a></sub></p>
 
 ## <a name="dsann.let-map2/sym-map">`sym-map`</a>
@@ -297,7 +297,7 @@ Creates a map from a seq of symbols.
 ```
 Macro.
 
-As for sym-map.
+As for sym-map, adding value filtering for the final map.
        Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
 
        For examples, see: dsann.let-map2-test
@@ -311,7 +311,7 @@ As for sym-map.
 ```
 Macro.
 
-As for sym-map but uses a provided namespace.
+As for sym-map but creates keys in a provided namespace.
 
      The provided namespace can be: string; keyword; namespaced keyword; or symbol.
        strings, keywords and symbols takes the literal value for the namespace.
@@ -330,7 +330,7 @@ As for sym-map but uses a provided namespace.
 ```
 Macro.
 
-As for sym-map-ns.
+As for sym-map-ns, adding value filtering for the final map.
      Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
      For examples, see: dsann.let-map2-test
 <p><sub><a href="https://github.com/davesann/let-map/blob/main/src/main/clj/dsann/let_map2.cljc#L225-L235">Source</a></sub></p>
@@ -343,5 +343,5 @@ As for sym-map-ns.
 ```
 Function.
 
-Convert symbols intoa vector of map entries [k v]
+(internal) Convert symbols into a vector of map entries [k v]
 <p><sub><a href="https://github.com/davesann/let-map/blob/main/src/main/clj/dsann/let_map2.cljc#L46-L61">Source</a></sub></p>

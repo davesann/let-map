@@ -16,18 +16,18 @@
 ;;;; helpers for arg name filtering
 
 (defn ^:private _key?
-  "filter symbols that begin with _"
+  "(internal) Filter symbols that begin with _"
   [sym]
   (= \_ (nth (name sym) 0)))
 
 (defn ^:private clojure-destructure-id?
-  "true if sym matches clojure's internal temporary destructure names"
+  "(internal) Returns true if sym matches clojure's internal temporary destructure names"
   [sym]
   (let [s (name sym)]
     (re-find #"^(vec|map|seq|first|p)__" s)))
 
 (defn resolve-ns-name
-  "resolves the input to a namespace name for use in namespaced keywords"
+  "(internal) Resolves the input to a namespace name for use in namespaced keywords"
   [ns]
   (cond
     (= nil    ns) (name (ns-name *ns*))
@@ -44,7 +44,7 @@
 ;;                 (name ns))))
 
 (defn syms->map-entries
-  "Convert symbols intoa vector of map entries [k v]"
+  "(internal) Convert symbols into a vector of map entries [k v]"
   ([syms]
    (into []
          (comp
@@ -63,7 +63,7 @@
 (macros/deftime
 
   (defmacro assoc-syms
-    "like sym-map but assocs to supplied map.
+    "As for sym-map but assocs to a supplied map.
 
      (let [a 1 b 2] (assoc-syms some-map a b)) => {... :a 1 :b 2}
 
@@ -83,7 +83,7 @@
     `(assoc-syms {} ~syms))
 
   (defmacro let-assoc
-    "Like let-map, but assocs into the supplied map.
+    "As for let-map but assocs into a supplied map.
 
        (let-assoc some-map [a 1 b (inc a)]) => {... :a 1 :b 2}
 
@@ -96,7 +96,7 @@
          (assoc-syms ~m ~vars))))
 
   (defmacro let-map
-    "Takes a list of name-value pairs and returns a map
+    "Takes a list of name-value pairs and returns a map (works like 'let').
 
        (let-map [a 1 ...]) => {:a 1 ...}
 
@@ -106,7 +106,7 @@
 
 ;; filtering assocs
   (defmacro assoc-syms-
-    "As for assoc-syms.
+    "As for assoc-syms, adding value filtering for the final map.
        Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
 
        For examples, see: dsann.let-map2-test"
@@ -117,7 +117,7 @@
               (remove (fn [[_# v#]] (~remove? v#)) ~entries)))))
 
   (defmacro sym-map-
-    "As for sym-map.
+    "As for sym-map, adding value filtering for the final map.
        Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
 
        For examples, see: dsann.let-map2-test"
@@ -126,7 +126,7 @@
      `(assoc-syms- ~remove? {} ~syms)))
 
   (defmacro let-assoc-
-    "As for let-assoc.
+    "As for let-assoc, adding value filtering for the final map.
        Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
 
        For examples, see: dsann.let-map2-test"
@@ -139,7 +139,7 @@
           (assoc-syms- ~remove? ~m ~vars)))))
 
   (defmacro let-map-
-    "As for let-map.
+    "As for let-map, adding value filtering for the final map.
       Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
 
       For examples, see: dsann.let-map2-test"
@@ -150,7 +150,7 @@
 ;;;; ns versions
 
   (defmacro assoc-syms-ns
-    "As for assoc-syms but uses a provided namespace.
+    "As for assoc-syms, creates keys in a provided namespace.
 
      The provided namespace can be: string; keyword; namespaced keyword; or symbol.
        strings, keywords and symbols takes the literal value for the namespace.
@@ -165,7 +165,7 @@
        `(into ~m ~entries))))
 
   (defmacro sym-map-ns
-    "As for sym-map but uses a provided namespace.
+    "As for sym-map but creates keys in a provided namespace.
 
      The provided namespace can be: string; keyword; namespaced keyword; or symbol.
        strings, keywords and symbols takes the literal value for the namespace.
@@ -179,7 +179,7 @@
      `(assoc-syms-ns ~ns-target {} ~syms)))
 
   (defmacro let-assoc-ns
-    "As for let-assoc but uses a provided namespace
+    "As for let-assoc but creates keys in a provided namespace.
 
      The provided namespace can be: string; keyword; namespaced keyword; or symbol.
        strings, keywords and symbols takes the literal value for the namespace.
@@ -196,7 +196,7 @@
           (assoc-syms-ns ~target-ns ~m ~vars)))))
 
   (defmacro let-map-ns
-    "As for let-map but uses a provided namespace
+    "As for let-map but creates keys in a provided namespace.
 
      The provided namespace can be: string; keyword; namespaced keyword; or symbol.
        strings, keywords and symbols takes the literal value for the namespace.
@@ -212,7 +212,7 @@
 ;; take a predicate and do not include k if (pred? v) is true
 ;;
   (defmacro assoc-syms-ns-
-    "As for assoc-syms-ns.
+    "As for assoc-syms-ns, adding value filtering for the final map.
      Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
      For examples, see: dsann.let-map2-test"
     ([m syms] `(assoc-syms-ns nil ~m ~syms))
@@ -223,7 +223,7 @@
               (remove (fn [[_# v#]] (~remove? v#)) ~entries)))))
 
   (defmacro sym-map-ns-
-    "As for sym-map-ns.
+    "As for sym-map-ns, adding value filtering for the final map.
      Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
      For examples, see: dsann.let-map2-test"
 
@@ -235,7 +235,7 @@
      `(assoc-syms-ns- ~remove? ~ns-target {} ~syms)))
 
   (defmacro let-assoc-ns-
-    "As for let-assoc-ns.
+    "As for let-assoc-ns, adding value filtering for the final map.
      Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
      For examples, see: dsann.let-map2-test"
 
@@ -251,7 +251,7 @@
           (assoc-syms-ns- ~remove? ~target-ns ~m ~vars)))))
 
   (defmacro let-map-ns-
-    "As for let-map-ns.
+    "As for let-map-ns, adding value filtering for the final map.
      Trailing '-' indicates values are filtered out. i.e. not included if (remove? v) is true. defaults to remove nils.
      For examples, see: dsann.let-map2-test"
 
