@@ -54,7 +54,7 @@ refer to dsann.let-map2-test for examples
 ## Deps
 
 ```clojure
-io.github.davesann/let-map {:git/tag "v8" :git/sha "c55f58b"}
+io.github.davesann/let-map {:git/tag "v9" :git/sha "d0f023e"}
 ```
 
 if you want to list all versions
