@@ -130,7 +130,7 @@
       (are =
            (let-map [_a 1  b (inc _a)])            {:b 2}))
 
-    (testing "Destructuring works if needed"
+    (testing "Destructuring works"
       (let [m {:a 1} v [1 2 3]]
         (are =
              (let-map [{:keys [a]} m])             {:a 1}
@@ -191,7 +191,7 @@
       (are =
            (let-map-ns [_a 1  b (inc _a)])            {::b 2}))
 
-    (testing "Destructuring works if needed"
+    (testing "Destructuring works"
       (let [m {:a 1} v [1 2 3]]
         (are =
              (let-map-ns [{:keys [a]} m])             {::a 1}
@@ -251,7 +251,7 @@
       (are =
            (let-map-ns- [_a 1  b (inc _a)])            {::b 2}))
 
-    (testing "Destructuring works if needed"
+    (testing "Destructuring works"
       (let [m {:a 1} v [1 2 3]]
         (are =
              (let-map-ns- [{:keys [a]} m])             {::a 1}
